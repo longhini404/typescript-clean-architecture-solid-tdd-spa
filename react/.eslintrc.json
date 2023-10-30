@@ -1,0 +1,64 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "extends": [
+      "plugin:react/recommended",
+      "airbnb",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "ecmaFeatures": {
+        "jsx": true
+      },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+      },
+      "plugins": [
+        "react",
+        "@typescript-eslint",
+        "prettier"
+      ],
+    "rules": {
+      "prettier/prettier": "error",
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "ts": "never",
+          "tsx": "never"
+        }
+      ],
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": true,
+          "optionalDependencies": false,
+          "peerDependencies": false
+        }
+      ],
+      "camelcase": "off",
+      "no-plusplus": "off",
+      "react/prop-types": "off",
+      "no-restricted-syntax": "off",
+      "no-use-before-define": "off",
+      "no-unused-expressions": "off",
+      "class-methods-use-this": "off",
+      "react/require-default-props": "off",
+      "react/jsx-props-no-spreading": "off",
+      "import/prefer-default-export": "off",
+      "react/jsx-filename-extension": "off",
+      "@typescript-eslint/no-namespace": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off"
+    },
+    "settings": {
+      "import/resolver": {
+        "typescript": {}
+      }
+    }
+}

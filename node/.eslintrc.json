@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "standard-with-typescript",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/method-signature-style": "off",
+    "@typescript-eslint/return-await": "off",
+    "@typescript-eslint/comma-spacing": "off",
+    "@typescript-eslint/no-redeclare": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "import/export": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "handle-callback-err": "off"
+  }
+}
