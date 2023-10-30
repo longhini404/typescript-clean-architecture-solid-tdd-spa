@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm'
+import { TagEntity } from './tag-entity'
 
 @Entity({ name: 'task' })
 export class TaskEntity {
@@ -16,4 +17,8 @@ export class TaskEntity {
 
   @Column({ type: 'varchar' })
   duration: string
+
+  @ManyToMany(() => TagEntity, tag => tag.tasks)
+  @JoinTable({ name: 'task_tag' })
+  tags: TagEntity[]
 }

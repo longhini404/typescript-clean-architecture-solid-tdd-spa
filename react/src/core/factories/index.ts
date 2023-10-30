@@ -1,5 +1,7 @@
 export * from './dashboard'
 export * from './login'
+export * from './tag-listing'
+export * from './tag-registration'
 export * from './task-listing'
 export * from './task-registration'
 export * from './user-registration'

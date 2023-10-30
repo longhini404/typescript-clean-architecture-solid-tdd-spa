@@ -9,7 +9,7 @@ export class CreateTaskService implements CreateTask {
   ) {}
 
   async create(params: CreateTask.Params): Promise<CreateTask.Result> {
-    const { title, description, dateTime, duration } = params
+    const { title, description, dateTime, duration, tags } = params
 
     const taskFound = await this.loadTaskByTitleRepository.loadByTitle({ title })
     if (taskFound) {
@@ -21,6 +21,7 @@ export class CreateTaskService implements CreateTask {
       description,
       dateTime,
       duration,
+      tags,
     })
 
     return task

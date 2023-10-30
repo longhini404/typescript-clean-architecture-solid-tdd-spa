@@ -10,6 +10,11 @@ import {
   listTasksPath,
   loadTaskByIdPath,
   updateTaskPath,
+  createTagPath,
+  deleteTagPath,
+  listTagsPath,
+  loadTagByIdPath,
+  updateTagPath,
 } from './path/index'
 
 export default {
@@ -26,4 +31,10 @@ export default {
   '/api/task/load': listTasksPath,
   '/api/task/load/{user_id}': loadTaskByIdPath,
   '/api/task/update/{user_id}': updateTaskPath,
+
+  '/api/tag/create': createTagPath,
+  '/api/tag/delete/{user_id}': deleteTagPath,
+  '/api/tag/load': listTagsPath,
+  '/api/tag/load/{user_id}': loadTagByIdPath,
+  '/api/tag/update/{user_id}': updateTagPath,
 }

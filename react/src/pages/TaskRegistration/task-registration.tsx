@@ -10,6 +10,8 @@ import { CreateTask, ReadTasks, UpdateTask } from 'domain/interfaces/tasks'
 import { Toast } from 'domain/interfaces/toast'
 import { Task } from 'domain/models'
 import { Link, useHistory } from 'react-router-dom'
+import { ReadTags } from 'domain/interfaces/tags'
+import { ReactSelect } from 'components/select'
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -20,6 +22,7 @@ const schema = yup.object().shape({
 
 type TaskRegistrationProps = {
   createTask: CreateTask
+  readTags: ReadTags
   readTasks: ReadTasks
   updateTask: UpdateTask
   toast: Toast
@@ -28,6 +31,7 @@ type TaskRegistrationProps = {
 
 const TaskRegistration = ({
   createTask,
+  readTags,
   readTasks,
   updateTask,
   toast,
@@ -35,6 +39,35 @@ const TaskRegistration = ({
 }: TaskRegistrationProps) => {
   const history = useHistory()
   const [getTask, setTask] = useState<Task>()
+
+  const [getTags, setTags] = useState<any>([])
+  const [getSelectedTags, setSelectedTags] = useState<any>([])
+
+  const fetchTags = async () => {
+    try {
+      const result = await readTags.read()
+
+      if ('tags' in result) {
+        const tags = result.tags.map(tag => ({
+          label: tag.title,
+          value: tag.id,
+        }))
+        setTags(tags)
+      } else {
+        toast.error({
+          message: 'Erro ao buscar tags.',
+        })
+      }
+    } catch (error) {
+      toast.error({
+        message: 'Erro ao buscar tags.',
+      })
+    }
+  }
+
+  useEffect(() => {
+    fetchTags()
+  }, [])
 
   const {
     register,
@@ -70,6 +103,35 @@ const TaskRegistration = ({
     }, [])
   }
 
+  const onSubmit: SubmitHandler<Task> = async task => {
+    try {
+      const isDurationValid = checkDuration(task.dateTime, task.duration)
+      const taskWithTags = { ...task, tags: getSelectedTags }
+      if (isDurationValid) {
+        if (id) {
+          await updateTask.update(id, taskWithTags)
+          toast.success({
+            message: 'Tarefa atualizada com sucesso',
+            duration: 5000,
+          })
+          history.push('/listar-tarefas')
+        } else {
+          await createTask.create(taskWithTags)
+          toast.success({
+            message: 'Tarefa cadastrada com sucesso',
+            duration: 5000,
+          })
+          history.push('/listar-tarefas')
+        }
+      }
+    } catch (error: any) {
+      toast.error({
+        message: 'Erro ao cadastrar a tarefa.',
+        duration: 5000,
+      })
+    }
+  }
+
   function checkDuration(
     dateTime: string | number | Date,
     duration: string | number | Date
@@ -87,34 +149,6 @@ const TaskRegistration = ({
     })
 
     return false
-  }
-
-  const onSubmit: SubmitHandler<Task> = async task => {
-    try {
-      const isDurationValid = checkDuration(task.dateTime, task.duration)
-      if (isDurationValid) {
-        if (id) {
-          await updateTask.update(id, task)
-          toast.success({
-            message: 'Tarefa atualizada com sucesso',
-            duration: 5000,
-          })
-          history.push('/listar-tarefas')
-        } else {
-          await createTask.create(task)
-          toast.success({
-            message: 'Tarefa cadastrada com sucesso',
-            duration: 5000,
-          })
-          history.push('/listar-tarefas')
-        }
-      }
-    } catch (error: any) {
-      toast.error({
-        message: 'Erro ao cadastrar a tarefa.',
-        duration: 5000,
-      })
-    }
   }
 
   return (
@@ -173,6 +207,17 @@ const TaskRegistration = ({
                   data-testid="duration-input"
                   error={errors.duration?.message}
                   {...register('duration')}
+                />
+              </Flex>
+            </Flex>
+            <Flex justify="flex-start" wrap="wrap" w="100%" mb="0.5rem">
+              <Flex flex={2} mr={{ base: '0', sm: '1rem' }} minW="13.75rem">
+                <ReactSelect
+                  isMulti
+                  options={getTags}
+                  handleSelection={(selectedValues: any) => {
+                    setSelectedTags(selectedValues)
+                  }}
                 />
               </Flex>
             </Flex>

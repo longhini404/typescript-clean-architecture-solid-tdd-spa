@@ -7,9 +7,11 @@ import {
   ReadTasksService,
   UpdateTaskService,
 } from 'data/services/tasks'
+import { ReadTagsService } from 'data/services/tags'
 
 export const MakeTaskRegistrationFactory = () => {
   const createTaskService = new CreateTaskService()
+  const readTagsService = new ReadTagsService()
   const readTasksService = new ReadTasksService()
   const updateTaskService = new UpdateTaskService()
   const toastService = new ToastService()
@@ -20,6 +22,7 @@ export const MakeTaskRegistrationFactory = () => {
   return (
     <TaskRegistration
       createTask={createTaskService}
+      readTags={readTagsService}
       readTasks={readTasksService}
       updateTask={updateTaskService}
       toast={toastService}

@@ -1,5 +1,7 @@
 export { default as Dashboard } from './Dashboard/dashboard'
 export { default as Login } from './Login/login'
+export { default as TagListing } from './TagListing/tag-listing'
+export { default as TagRegistration } from './TagRegistration/tag-registration'
 export { default as TaskListing } from './TaskListing/task-listing'
 export { default as TaskRegistration } from './TaskRegistration/task-registration'
 export { default as UserRegistration } from './UserRegistration/user-registration'

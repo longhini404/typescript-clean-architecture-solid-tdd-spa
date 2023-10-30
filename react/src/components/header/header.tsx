@@ -9,12 +9,24 @@ const Header = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
+  const handleTagsListing = () => {
+    history.push('/listar-tags')
+  }
+
+  const handleTagRegistration = () => {
+    history.push('/cadastrar-tag')
+  }
+
   const handleTasksListing = () => {
     history.push('/listar-tarefas')
   }
 
-  const handleTasksRegistration = () => {
-    history.push('/cadastrar-tarefas')
+  const handleTaskRegistration = () => {
+    history.push('/cadastrar-tarefa')
+  }
+
+  const handleDashboard = () => {
+    history.push('/')
   }
 
   return (
@@ -28,7 +40,24 @@ const Header = () => {
         mx="0.5rem"
         variant="outline"
         colorScheme="white"
-        onClick={handleTasksRegistration}
+        onClick={handleTagRegistration}
+      >
+        Cadastrar Tag
+      </Button>
+      <Button
+        mx="0.5rem"
+        variant="outline"
+        colorScheme="white"
+        onClick={handleTagsListing}
+      >
+        Listar Tags
+      </Button>
+
+      <Button
+        mx="0.5rem"
+        variant="outline"
+        colorScheme="white"
+        onClick={handleTaskRegistration}
       >
         Cadastrar Tarefa
       </Button>
@@ -39,6 +68,14 @@ const Header = () => {
         onClick={handleTasksListing}
       >
         Listar Tarefas
+      </Button>
+      <Button
+        mx="0.5rem"
+        variant="outline"
+        colorScheme="white"
+        onClick={handleDashboard}
+      >
+        Dashboard
       </Button>
       <Button
         onClick={() => dispatch(signOut())}

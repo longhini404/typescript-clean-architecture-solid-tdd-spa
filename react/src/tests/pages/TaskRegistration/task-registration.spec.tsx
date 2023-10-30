@@ -18,6 +18,10 @@ const mockReadTasks = {
   read: jest.fn(),
 }
 
+const mockReadTags = {
+  read: jest.fn(),
+}
+
 const mockToast = {
   success: jest.fn(),
   error: jest.fn(),
@@ -29,6 +33,7 @@ function renderTaskRegistrationComponent(id?: number) {
       <ChakraProvider>
         <TaskRegistration
           createTask={mockCreateTask}
+          readTags={mockReadTags}
           readTasks={mockReadTasks}
           updateTask={mockUpdateTask}
           toast={mockToast}
@@ -67,6 +72,7 @@ test('renders TaskRegistration component with fake data', async () => {
       description: fakeDescription,
       dateTime: fakeDateTime,
       duration: fakeDuration,
+      tags: [],
     })
   })
 

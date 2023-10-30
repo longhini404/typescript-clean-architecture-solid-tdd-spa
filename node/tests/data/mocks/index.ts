@@ -1,4 +1,5 @@
 export * from './mock-authentication'
+export * from './mock-tag'
 export * from './mock-task'
 export * from './mock-user'
 export * from './monitoring'

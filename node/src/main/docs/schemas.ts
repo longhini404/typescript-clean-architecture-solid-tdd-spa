@@ -10,6 +10,10 @@ import {
   listTasksResultSchema,
   loadTaskByIdResultSchema,
   updateTaskParamsSchema,
+  createTagParamsSchema,
+  listTagsResultSchema,
+  loadTagByIdResultSchema,
+  updateTagParamsSchema,
 } from './schemas/index'
 
 export default {
@@ -27,4 +31,9 @@ export default {
   listTasksSchema: listTasksResultSchema,
   loadTaskByIdSchema: loadTaskByIdResultSchema,
   updateTaskParams: updateTaskParamsSchema,
+
+  createTagParams: createTagParamsSchema,
+  listTagsSchema: listTagsResultSchema,
+  loadTagByIdSchema: loadTagByIdResultSchema,
+  updateTagParams: updateTagParamsSchema,
 }

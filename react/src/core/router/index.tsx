@@ -3,6 +3,8 @@ import { Switch } from 'react-router-dom'
 import {
   MakeDashboardFactory,
   MakeLoginFactory,
+  MakeTagListingFactory,
+  MakeTagRegistrationFactory,
   MakeTaskListingFactory,
   MakeTaskRegistrationFactory,
   MakeUserRegistrationFactory,
@@ -14,13 +16,19 @@ const Routes = () => (
     <Route exact path="/" component={MakeLoginFactory} />
     <Route path="/dashboard" component={MakeDashboardFactory} isPrivate />
     <Route path="/sign-up" component={MakeUserRegistrationFactory} />
+    <Route path="/listar-tags" component={MakeTagListingFactory} isPrivate />
+    <Route
+      path="/cadastrar-tag"
+      component={MakeTagRegistrationFactory}
+      isPrivate
+    />
     <Route
       path="/listar-tarefas"
       component={MakeTaskListingFactory}
       isPrivate
     />
     <Route
-      path="/cadastrar-tarefas"
+      path="/cadastrar-tarefa"
       component={MakeTaskRegistrationFactory}
       isPrivate
     />

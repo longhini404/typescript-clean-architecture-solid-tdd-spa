@@ -1,5 +1,6 @@
 export * from './bearer-token'
 export * from './error'
 export * from './login/index'
+export * from './tag/index'
 export * from './task/index'
 export * from './user/index'

@@ -4,6 +4,12 @@ export type Task = {
   description: string
   dateTime: string
   duration: string
+  tags?: [
+    {
+      label: string
+      value: string
+    }
+  ]
 }
 
 export type Tasks = {

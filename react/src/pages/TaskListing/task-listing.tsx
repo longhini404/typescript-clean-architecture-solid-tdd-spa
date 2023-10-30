@@ -11,12 +11,12 @@ import {
   Th,
   Thead,
   Tr,
-  Input,
 } from '@chakra-ui/react'
 import { Tasks } from 'domain/models'
 import { Button } from 'components/button'
 import { useHistory } from 'react-router-dom'
 import { dateTimeFormatter } from 'utils/functions'
+import { Input } from 'components/input'
 
 type TaskListingProps = {
   deleteTask: DeleteTask
@@ -30,7 +30,7 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
   const [searchTitle, setSearchTitle] = useState('')
 
   const handleEdit = (id: number) => {
-    history.push(`/cadastrar-tarefas?id=${id}`)
+    history.push(`/cadastrar-tarefa?id=${id}`)
   }
 
   const handleDelete = async (id: number) => {
@@ -90,7 +90,9 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
           type="text"
           value={searchTitle}
           placeholder="Buscar"
-          onChange={e => setSearchTitle(e.target.value)}
+          onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+            setSearchTitle(e.target.value)
+          }
         />
       </Flex>
       {filteredTasks?.length === 0 ? (

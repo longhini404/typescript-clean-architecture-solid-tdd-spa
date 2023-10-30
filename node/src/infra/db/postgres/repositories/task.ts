@@ -7,7 +7,7 @@ import {
   LoadTaskByTitleRepository,
   UpdateTaskRepository,
 } from '@/data/protocols/repository/task'
-import { TaskEntity } from '@/infra/db/postgres/entities'
+import { TaskEntity, TaskTagEntity } from '@/infra/db/postgres/entities'
 
 export class PostgresTaskRepository
   implements
@@ -19,16 +19,47 @@ export class PostgresTaskRepository
     UpdateTaskRepository
 {
   async create(params: CreateTaskRepository.Params): Promise<CreateTaskRepository.Result> {
-    const repository = getManager().getRepository(TaskEntity)
-    const response = await repository.save(params)
+    const taskRepository = getManager().getRepository(TaskEntity)
+    const taskTagRepository = getManager().getRepository(TaskTagEntity)
+
+    const task = taskRepository.create({
+      title: params.title,
+      description: params.description,
+      dateTime: params.dateTime,
+      duration: params.duration,
+    })
+
+    const savedTask = await taskRepository.save(task)
+    const taskId = savedTask.id
+
+    const taskTags = params.tags.map(tag => ({
+      task: savedTask,
+      tag: tag.value,
+    }))
+
+    await taskTagRepository.save(taskTags)
+
     return {
-      id: response.id,
+      id: taskId,
     }
   }
 
   async delete({ task_id }: DeleteTaskRepository.Params): Promise<void> {
-    const repository = getManager().getRepository(TaskEntity)
-    await repository.delete({ id: task_id })
+    const entityManager = getManager()
+
+    await entityManager
+      .createQueryBuilder()
+      .delete()
+      .from(TaskTagEntity)
+      .where('taskId = :task_id', { task_id })
+      .execute()
+
+    await entityManager
+      .createQueryBuilder()
+      .delete()
+      .from(TaskEntity)
+      .where('id = :task_id', { task_id })
+      .execute()
   }
 
   async load(params: ListTasksRepository.Params): Promise<ListTasksRepository.Result> {
@@ -36,6 +67,7 @@ export class PostgresTaskRepository
     const [result, total] = await repository.findAndCount({
       skip: (params.page - 1) * params.items,
       take: params.items,
+      relations: ['tags'],
     })
     const tasks = result.map(task => ({
       id: task.id,
@@ -43,6 +75,7 @@ export class PostgresTaskRepository
       description: task.description,
       dateTime: task.dateTime,
       duration: task.duration,
+      tags: task.tags,
     }))
     return {
       tasks,
@@ -71,12 +104,33 @@ export class PostgresTaskRepository
   }
 
   async update({ task_id, information_to_update }: UpdateTaskRepository.Params): Promise<void> {
-    const repository = getManager().getRepository(TaskEntity)
-    await repository.update(
-      {
-        id: task_id,
-      },
-      information_to_update
-    )
+    const taskRepository = getManager().getRepository(TaskEntity)
+    const taskTagRepository = getManager().getRepository(TaskTagEntity)
+
+    const task = await taskRepository.findOne(task_id)
+
+    if (information_to_update.title) {
+      task.title = information_to_update.title
+    }
+    if (information_to_update.description) {
+      task.description = information_to_update.description
+    }
+    if (information_to_update.dateTime) {
+      task.dateTime = information_to_update.dateTime
+    }
+    if (information_to_update.duration) {
+      task.duration = information_to_update.duration
+    }
+
+    if (information_to_update.tags) {
+      const tagIds = information_to_update.tags.map(tag => tag.value)
+
+      await taskTagRepository.delete({ task })
+
+      const taskTagPromises = tagIds.map(tagId => taskTagRepository.save({ task, tag: tagId }))
+      await Promise.all(taskTagPromises)
+    }
+
+    await taskRepository.save(task)
   }
 }
