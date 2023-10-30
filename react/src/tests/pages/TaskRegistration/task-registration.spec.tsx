@@ -44,8 +44,8 @@ test('renders TaskRegistration component with fake data', async () => {
 
   const fakeTitle = faker.datatype.string()
   const fakeDescription = faker.datatype.string()
-  const fakeDateTime = faker.datatype.string()
-  const fakeDuration = faker.datatype.string()
+  const fakeDateTime = '2023-10-10T10:10'
+  const fakeDuration = '2023-10-10T10:10'
 
   const titleInput = getByTestId('title-input')
   const descriptionInput = getByTestId('description-input')
@@ -79,8 +79,8 @@ test('renders TaskRegistration component with fake data for update', async () =>
   const mockTaskForUpdate = {
     title: 'Updated Task Title',
     description: 'Updated task description.',
-    dateTime: 'Updated task dateTime.',
-    duration: 'Updated task duration.',
+    dateTime: '2023-10-10T10:10',
+    duration: '2023-10-10T10:10',
   }
 
   mockReadTasks.read.mockResolvedValue(mockTaskForUpdate)

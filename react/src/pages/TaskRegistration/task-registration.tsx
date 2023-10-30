@@ -70,25 +70,48 @@ const TaskRegistration = ({
     }, [])
   }
 
+  function checkDuration(
+    dateTime: string | number | Date,
+    duration: string | number | Date
+  ) {
+    const dateTimeDate = new Date(dateTime)
+    const durationDate = new Date(duration)
+
+    if (dateTimeDate <= durationDate) {
+      return true
+    }
+
+    toast.error({
+      message: 'A duração não deve anteceder a Data & Hora do começo.',
+      duration: 5000,
+    })
+
+    return false
+  }
+
   const onSubmit: SubmitHandler<Task> = async task => {
     try {
-      if (id) {
-        await updateTask.update(id, task)
-        toast.success({
-          message: 'Tarefa atualizado com sucesso',
-          duration: 5000,
-        })
-      } else {
-        await createTask.create(task)
-        toast.success({
-          message: 'Tarefa cadastrado com sucesso',
-          duration: 5000,
-        })
+      const isDurationValid = checkDuration(task.dateTime, task.duration)
+      if (isDurationValid) {
+        if (id) {
+          await updateTask.update(id, task)
+          toast.success({
+            message: 'Tarefa atualizada com sucesso',
+            duration: 5000,
+          })
+          history.push('/listar-tarefas')
+        } else {
+          await createTask.create(task)
+          toast.success({
+            message: 'Tarefa cadastrada com sucesso',
+            duration: 5000,
+          })
+          history.push('/listar-tarefas')
+        }
       }
-      history.push('/listar-tarefas')
     } catch (error: any) {
       toast.error({
-        message: 'Erro ao cadastrar o tarefa.',
+        message: 'Erro ao cadastrar a tarefa.',
         duration: 5000,
       })
     }
@@ -136,7 +159,8 @@ const TaskRegistration = ({
             <Flex justify="flex-start" wrap="wrap" w="100%" mb="0.5rem">
               <Flex flex={2} mr={{ base: '0', sm: '1rem' }} minW="13.75rem">
                 <Input
-                  placeholder="Data e Hora"
+                  label="Data & Hora: Começo"
+                  type="datetime-local"
                   data-testid="dateTime-input"
                   error={errors.dateTime?.message}
                   {...register('dateTime')}
@@ -144,7 +168,8 @@ const TaskRegistration = ({
               </Flex>
               <Flex flex={2} minW="13.75rem">
                 <Input
-                  placeholder="Duração"
+                  label="Data & Hora: Fim"
+                  type="datetime-local"
                   data-testid="duration-input"
                   error={errors.duration?.message}
                   {...register('duration')}

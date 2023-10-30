@@ -98,7 +98,7 @@ test('deletes a task', async () => {
 
   await waitFor(() => {
     expect(mockToast.success).toHaveBeenCalledWith({
-      message: 'Tarefa deletado com sucesso',
+      message: 'Tarefa deletada com sucesso',
       duration: 5000,
     })
   })

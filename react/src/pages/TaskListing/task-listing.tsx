@@ -11,10 +11,12 @@ import {
   Th,
   Thead,
   Tr,
+  Input,
 } from '@chakra-ui/react'
 import { Tasks } from 'domain/models'
 import { Button } from 'components/button'
 import { useHistory } from 'react-router-dom'
+import { dateTimeFormatter } from 'utils/functions'
 
 type TaskListingProps = {
   deleteTask: DeleteTask
@@ -25,6 +27,7 @@ type TaskListingProps = {
 const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
   const history = useHistory()
   const [getTasks, setTasks] = useState<Tasks>()
+  const [searchTitle, setSearchTitle] = useState('')
 
   const handleEdit = (id: number) => {
     history.push(`/cadastrar-tarefas?id=${id}`)
@@ -34,7 +37,7 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
     try {
       await deleteTask.delete(id)
       toast.success({
-        message: 'Tarefa deletado com sucesso',
+        message: 'Tarefa deletada com sucesso',
         duration: 5000,
       })
       fetchTasks()
@@ -62,6 +65,13 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
     fetchTasks()
   }, [])
 
+  const filteredTasks = getTasks?.tasks.filter(task => {
+    const titleMatch = task.title
+      .toLowerCase()
+      .includes(searchTitle.toLowerCase())
+    return titleMatch
+  })
+
   return (
     <Box
       w="80%"
@@ -75,24 +85,34 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
       <Text fontSize="xl" fontWeight="bold" mb="2rem">
         Listar Tarefas
       </Text>
-      {getTasks?.tasks.length === 0 ? (
+      <Flex mb="1rem">
+        <Input
+          type="text"
+          value={searchTitle}
+          placeholder="Buscar"
+          onChange={e => setSearchTitle(e.target.value)}
+        />
+      </Flex>
+      {filteredTasks?.length === 0 ? (
         <Text>Nenhum tarefa cadastrado.</Text>
       ) : (
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th>ID</Th>
               <Th>Título</Th>
               <Th>Descrição</Th>
+              <Th>Data & Hora</Th>
+              <Th>Duração</Th>
               <Th>Ações</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {getTasks?.tasks.map(task => (
+            {filteredTasks?.map(task => (
               <Tr key={task.id}>
-                <Td>{task.id}</Td>
                 <Td>{task.title}</Td>
                 <Td>{task.description}</Td>
+                <Td>{dateTimeFormatter(task.dateTime)}</Td>
+                <Td>{dateTimeFormatter(task.duration)}</Td>
                 <Td>
                   <Flex flexDirection="column">
                     <Button onClick={() => handleEdit(task.id)} my="0.25rem">
