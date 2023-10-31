@@ -13,6 +13,7 @@ export type ReactSelectProps = {
   name: string
   control?: any
   isMulti?: boolean
+  placeholder?: string
   options: OptionsType[]
   closeMenuOnSelect?: boolean
   handleSelection: (
@@ -24,11 +25,11 @@ const CustomSelect = ({ ...props }) => {
   return (
     <SelectMultiple
       {...props}
-      placeholder="-- Selecione --"
+      placeholder={props.placeholder || '-- Selecione --'}
       styles={{
         container: provided => ({
           ...provided,
-          width: '13.75rem',
+          width: '50%',
         }),
       }}
       theme={(theme: any) => ({
@@ -49,6 +50,7 @@ const ReactSelect = forwardRef<any, ReactSelectProps>(
       options,
       control,
       isMulti,
+      placeholder,
       handleSelection,
       closeMenuOnSelect,
       ...props
@@ -62,6 +64,7 @@ const ReactSelect = forwardRef<any, ReactSelectProps>(
           {...props}
           options={options}
           isMulti={isMulti}
+          placeholder={placeholder}
           closeMenuOnSelect={closeMenuOnSelect}
           onChange={(e: SingleValue<OptionsType> | MultiValue<OptionsType>) => {
             handleSelection(e)

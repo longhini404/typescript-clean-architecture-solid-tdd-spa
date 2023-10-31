@@ -210,16 +210,15 @@ const TaskRegistration = ({
                 />
               </Flex>
             </Flex>
-            <Flex justify="flex-start" wrap="wrap" w="100%" mb="0.5rem">
-              <Flex flex={2} mr={{ base: '0', sm: '1rem' }} minW="13.75rem">
-                <ReactSelect
-                  isMulti
-                  options={getTags}
-                  handleSelection={(selectedValues: any) => {
-                    setSelectedTags(selectedValues)
-                  }}
-                />
-              </Flex>
+            <Flex w="100%" ms="25%" mb="0.5rem" display="flex">
+              <ReactSelect
+                isMulti
+                options={getTags}
+                placeholder="Selecionar tags"
+                handleSelection={(selectedValues: any) => {
+                  setSelectedTags(selectedValues)
+                }}
+              />
             </Flex>
             <Flex
               w="100%"

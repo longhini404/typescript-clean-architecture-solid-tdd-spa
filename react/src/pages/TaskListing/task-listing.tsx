@@ -17,15 +17,27 @@ import { Button } from 'components/button'
 import { useHistory } from 'react-router-dom'
 import { dateTimeFormatter } from 'utils/functions'
 import { Input } from 'components/input'
+import { ReadTags } from 'domain/interfaces/tags'
+import { ReactSelect } from 'components/select'
 
 type TaskListingProps = {
   deleteTask: DeleteTask
+  readTags: ReadTags
   readTasks: ReadTasks
   toast: Toast
 }
 
-const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
+const TaskListing = ({
+  readTasks,
+  readTags,
+  deleteTask,
+  toast,
+}: TaskListingProps) => {
   const history = useHistory()
+
+  const [getTags, setTags] = useState<any>([])
+  const [getSelectedTags, setSelectedTags] = useState<any>([])
+
   const [getTasks, setTasks] = useState<Tasks>()
   const [searchTitle, setSearchTitle] = useState('')
 
@@ -61,7 +73,30 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
     }
   }
 
+  const fetchTags = async () => {
+    try {
+      const result = await readTags.read()
+
+      if ('tags' in result) {
+        const tags = result.tags.map(tag => ({
+          label: tag.title,
+          value: tag.id,
+        }))
+        setTags(tags)
+      } else {
+        toast.error({
+          message: 'Erro ao buscar tags.',
+        })
+      }
+    } catch (error) {
+      toast.error({
+        message: 'Erro ao buscar tags.',
+      })
+    }
+  }
+
   useEffect(() => {
+    fetchTags()
     fetchTasks()
   }, [])
 
@@ -69,7 +104,17 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
     const titleMatch = task.title
       .toLowerCase()
       .includes(searchTitle.toLowerCase())
-    return titleMatch
+
+    const taskTagIds = task.tags?.map(tag => tag.id) || []
+    const selectedTagIds = getSelectedTags.map(
+      (tag: { value: any }) => tag.value
+    )
+
+    const tagMatch = selectedTagIds.every((tagId: any) =>
+      taskTagIds.includes(tagId)
+    )
+
+    return titleMatch && tagMatch
   })
 
   return (
@@ -85,7 +130,7 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
       <Text fontSize="xl" fontWeight="bold" mb="2rem">
         Listar Tarefas
       </Text>
-      <Flex mb="1rem">
+      <Flex justify="flex-start" wrap="wrap" w="100%" mb="0.5rem">
         <Input
           type="text"
           value={searchTitle}
@@ -93,6 +138,16 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
           onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
             setSearchTitle(e.target.value)
           }
+        />
+      </Flex>
+      <Flex w="100%" ms="25%" mb="0.5rem" display="flex">
+        <ReactSelect
+          isMulti
+          options={getTags}
+          placeholder="Selecionar tags"
+          handleSelection={(selectedValues: any) => {
+            setSelectedTags(selectedValues)
+          }}
         />
       </Flex>
       {filteredTasks?.length === 0 ? (
@@ -105,6 +160,7 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
               <Th>Descrição</Th>
               <Th>Data & Hora</Th>
               <Th>Duração</Th>
+              <Th>Tags</Th>
               <Th>Ações</Th>
             </Tr>
           </Thead>
@@ -115,6 +171,11 @@ const TaskListing = ({ readTasks, deleteTask, toast }: TaskListingProps) => {
                 <Td>{task.description}</Td>
                 <Td>{dateTimeFormatter(task.dateTime)}</Td>
                 <Td>{dateTimeFormatter(task.duration)}</Td>
+                <Td>
+                  {task.tags && task.tags?.length > 0
+                    ? task.tags.map(tag => tag.title).join(', ')
+                    : 'Sem tag'}
+                </Td>
                 <Td>
                   <Flex flexDirection="column">
                     <Button onClick={() => handleEdit(task.id)} my="0.25rem">

@@ -4,12 +4,7 @@ export type Task = {
   description: string
   dateTime: string
   duration: string
-  tags?: [
-    {
-      label: string
-      value: string
-    }
-  ]
+  tags?: any[]
 }
 
 export type Tasks = {
