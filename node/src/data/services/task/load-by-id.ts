@@ -16,6 +16,7 @@ export class LoadTaskByIdService implements LoadTaskById {
       description: task.description,
       dateTime: task.dateTime,
       duration: task.duration,
+      tags: task.tags,
     }
   }
 }

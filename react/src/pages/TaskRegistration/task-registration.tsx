@@ -169,8 +169,13 @@ const TaskRegistration = ({
           direction="column"
         >
           <Text gRole="title" ml="1rem" my="1rem">
-            Cadastrar Tarefa
+            Cadastrar/Editar Tarefa
           </Text>
+          {getTask?.tags && getTask?.tags.length > 0 && (
+            <Text gRole="normal" ml="1rem" my="1rem">
+              Tags: {getTask?.tags.map(tag => tag.title).join(', ')}
+            </Text>
+          )}
           <Flex align="flex-start" direction="column" p="1rem">
             <Flex justify="flex-start" wrap="wrap" w="100%" mb="0.5rem">
               <Flex flex={2} mr={{ base: '0', sm: '1rem' }} minW="13.75rem">

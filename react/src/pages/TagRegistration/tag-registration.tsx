@@ -107,7 +107,7 @@ const TagRegistration = ({
           direction="column"
         >
           <Text gRole="title" ml="1rem" my="1rem">
-            Cadastrar Tag
+            Cadastrar/Editar Tag
           </Text>
           <Flex align="flex-start" direction="column" p="1rem">
             <Flex justify="flex-start" wrap="wrap" w="100%" mb="0.5rem">

@@ -1,4 +1,4 @@
-import { getManager } from 'typeorm'
+import { getManager, getRepository } from 'typeorm'
 import {
   CreateTaskRepository,
   DeleteTaskRepository,
@@ -91,8 +91,13 @@ export class PostgresTaskRepository
     id: task_id,
   }: LoadTaskByIdRepository.Params): Promise<LoadTaskByIdRepository.Result> {
     const repository = getManager().getRepository(TaskEntity)
-    const response = await repository.findOne({ id: task_id })
-    return response && response
+    const response = await repository
+      .createQueryBuilder('task')
+      .where('task.id = :id', { id: task_id })
+      .leftJoinAndSelect('task.tags', 'tags')
+      .getOne()
+
+    return response
   }
 
   async loadByTitle({
