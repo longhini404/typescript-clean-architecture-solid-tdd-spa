@@ -27,14 +27,14 @@ export default {
   '/api/user/update/{user_id}': updateUserPath,
 
   '/api/task/create': createTaskPath,
-  '/api/task/delete/{user_id}': deleteTaskPath,
+  '/api/task/delete/{task_id}': deleteTaskPath,
   '/api/task/load': listTasksPath,
-  '/api/task/load/{user_id}': loadTaskByIdPath,
-  '/api/task/update/{user_id}': updateTaskPath,
+  '/api/task/load/{task_id}': loadTaskByIdPath,
+  '/api/task/update/{task_id}': updateTaskPath,
 
   '/api/tag/create': createTagPath,
-  '/api/tag/delete/{user_id}': deleteTagPath,
+  '/api/tag/delete/{tag_id}': deleteTagPath,
   '/api/tag/load': listTagsPath,
-  '/api/tag/load/{user_id}': loadTagByIdPath,
-  '/api/tag/update/{user_id}': updateTagPath,
+  '/api/tag/load/{tag_id}': loadTagByIdPath,
+  '/api/tag/update/{tag_id}': updateTagPath,
 }
