@@ -13,7 +13,7 @@
 - [Yarn](https://yarnpkg.com/getting-started)
 - [Docker](https://www.docker.com/get-started)
 
-# **Deploy**
+# **Setup**
 
 ```
 yarn install
